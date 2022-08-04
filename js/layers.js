@@ -36,7 +36,7 @@ if (hasUpgrade("p", 15)) return player.p.points.pow(0.22).max(1.15).times(2)
 			title: "12",
 			description: "Points boost themselves gain",
 			cost: new Decimal(12),
-			effect() {{if (hasUpgrade("p", 25)) return player.points.pow(0.16).max(1).times(4)
+			effect() {if (hasUpgrade("p", 25)) return player.points.pow(0.16).max(1).times(4)
 if (hasUpgrade("p", 15)) return player.points.pow(0.16).max(1).times(2)
 				else return player.points.pow(0.16).max(1)},
 			effectDisplay() {return "" + format(upgradeEffect("p", 12)) + "x"},
@@ -105,8 +105,8 @@ else return "2.00x"},
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {	
-return (hasUpgrade("p", 24)?.25:0)
-return (hasUpgrade("p", 22)?.1:0)
+if (hasUpgrade("p", 24) return (hasUpgrade("p", 24)?.25:0)
+else return (hasUpgrade("p", 22)?.1:0)
   },
     layerShown(){return true}
 })
