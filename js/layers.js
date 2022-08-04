@@ -26,7 +26,8 @@ addLayer("p", {
 			title: "11",
 			description: "Unspent Prestige Points boosts point gain",
 			cost: new Decimal(8),
-			effect() {if (hasUpgrade("p", 15)) return player.p.points.pow(0.22).max(1.15).times(2)
+			effect() {if (hasUpgrade("p", 25)) return player.p.points.pow(0.22).max(1.15).times(4)
+if (hasUpgrade("p", 15)) return player.p.points.pow(0.22).max(1.15).times(2)
 				else return player.p.points.pow(0.22).max(1.15)},
 			effectDisplay() {return "" + format(upgradeEffect("p", 11)) + "x"},
 			unlocked() {return hasMilestone("te", 1)},
@@ -35,14 +36,15 @@ addLayer("p", {
 			title: "12",
 			description: "Points boost themselves gain",
 			cost: new Decimal(12),
-			effect() {if (hasUpgrade("p", 15)) return player.points.pow(0.16).max(1).times(2)
+			effect() {{if (hasUpgrade("p", 25)) return player.points.pow(0.16).max(1).times(4)
+if (hasUpgrade("p", 15)) return player.points.pow(0.16).max(1).times(2)
 				else return player.points.pow(0.16).max(1)},
 			effectDisplay() {return "" + format(upgradeEffect("p", 12)) + "x"},
 			unlocked() {return hasMilestone("te", 1)},
 		},
 						13: {
 			title: "13",
-			description: "Point boost gain by each challenge",
+			description: "Point boost gain by each upgrade",
 			cost: new Decimal(23),
 			effect() {let ret = Decimal.pow(1.5, player.p.upgrades.length)
 			return ret;},
@@ -53,7 +55,8 @@ addLayer("p", {
 			title: "14",
 			description: "Tree Expansion amount boost Prestige Point gain",
 			cost: new Decimal(31),
-			effect() {if (hasUpgrade("p", 15)) return player.te.points.pow(1.22).max(1).times(2)
+			effect() {if (hasUpgrade("p", 25)) return player.te.points.pow(1.22).max(1).times(4)
+if (hasUpgrade("p", 15)) return player.te.points.pow(1.22).max(1).times(2)
 				else return player.te.points.pow(1.22).max(1)},
 			effectDisplay() {return "" + format(upgradeEffect("p", 14)) + "x"},
 			unlocked() {return hasMilestone("te", 1)},
@@ -62,7 +65,8 @@ addLayer("p", {
 			title: "15",
 			description: "Twice 11, 12, 14 upgrades effects",
 			cost: new Decimal(54),
-			effectDisplay() {return "2.00x"},
+			effectDisplay() { if (hasUpgrade("p", 25)) return "4.00x"
+else return "2.00x"},
 			unlocked() {return hasMilestone("te", 1)},
 		},
 					21: {
@@ -73,8 +77,26 @@ addLayer("p", {
 		},
 					22: {
 			title: "22",
-			description: "Gain 10% of Prestige Point gain on reset",
+			description: "Gain 10% of Prestige Points on reset",
 			cost: new Decimal(1650),
+			unlocked() {return hasMilestone("te", 2)},
+		},
+		23: {
+			title: "23",
+			description: "Remove the 1.25x <b>21</b> dividing effect",
+			cost: new Decimal(12460),
+			unlocked() {return hasMilestone("te", 2)},
+		},
+24: {
+			title: "24",
+			description: "Power up passive Prestige point gain up to 25%",
+			cost: new Decimal(29260),
+			unlocked() {return hasMilestone("te", 2)},
+		},
+25: {
+			title: "25",
+			description: "Power up <b>15</b> effect",
+			cost: new Decimal(29260),
 			unlocked() {return hasMilestone("te", 2)},
 		},
 	},
@@ -82,7 +104,8 @@ addLayer("p", {
     hotkeys: [
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-									passiveGeneration() {			
+									passiveGeneration() {	
+return (hasUpgrade("p", 24)?.25:0)
 return (hasUpgrade("p", 22)?.1:0)
   },
     layerShown(){return true}
