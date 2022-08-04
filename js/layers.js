@@ -105,7 +105,7 @@ else return "2.00x"},
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {	
-if (hasUpgrade("p", 24) return (hasUpgrade("p", 24)?.25:0)
+if (hasUpgrade("p", 24)) return (hasUpgrade("p", 24)?.25:0)
 else return (hasUpgrade("p", 22)?.1:0)
   },
     layerShown(){return true}
