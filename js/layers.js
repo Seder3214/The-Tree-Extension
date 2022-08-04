@@ -83,7 +83,7 @@ else return "2.00x"},
 		},
 		23: {
 			title: "23",
-			description: "Remove the 1.25x <b>21</b> dividing effect",
+			description: "Replace  the 1.25x <b>21</b> dividing effect. 1.25x => 0.75",
 			cost: new Decimal(1780),
 			unlocked() {return hasMilestone("te", 2)},
 		},
