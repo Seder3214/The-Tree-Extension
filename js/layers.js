@@ -53,7 +53,7 @@ if (hasUpgrade("p", 15)) return player.points.pow(0.16).max(1).times(2)
 		},
 			14: {
 			title: "14",
-			description: "Tree Expansion amount boost Prestige Point gain",
+			description: "Tree Expansion amount boost Point gain",
 			cost: new Decimal(23),
 			effect() {if (hasUpgrade("p", 25)) return player.te.points.pow(1.22).max(1).times(4)
 if (hasUpgrade("p", 15)) return player.te.points.pow(1.22).max(1).times(2)
@@ -136,7 +136,7 @@ addLayer("te", {
 	milestones: {
     0: {
         requirementDescription: "1 Extensions",
-        effectDescription: "Double Poin gain",
+        effectDescription: "Double Point gain",
         done() { return player.te.points.gte(1) }
     },
 	    1: {
