@@ -267,7 +267,7 @@ effectDescription() {if (hasUpgrade("d", 11)) return "which multiplies Prestige 
     ],
 									passiveGeneration() {
   },
-    layerShown(){return true}
+    layerShown(){return (player.te.buyables[11].gte(1))}
 })
 addLayer("te", {
     name: "treeextension", // This is optional, only used in a few places, If absent it just uses the layer id.
