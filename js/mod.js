@@ -13,14 +13,13 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0325",
-	name: "Prestige Extreension!",
+	num: "0.05",
+	name: "Machine Extreension!",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0325</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+	<h3>v0.05</h3><br>
+<h2>I believe that I don't use it...</h2>.`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -49,6 +48,7 @@ function getPointGen() {
 	if (hasUpgrade("p", 14)) gain = gain.times(upgradeEffect("p", 14))
 	if (hasUpgrade("p", 21)) gain = gain.div(1.25)
 if (hasUpgrade("p", 23)) gain = gain.div(.5)
+	if (hasUpgrade("d", 22)) gain = gain.times(player.p.points.pow(0.02).times(player.d.points.pow(0.02))).max(2)
 
 	return gain
 }
@@ -59,6 +59,11 @@ function addedPlayerData() { return {
 
 // Display extra things at the top of the page
 var displayThings = [
+function() {
+if (hasUpgrade("d", 22)) {
+	return "Base Incremency formula: " + format(player.p.points.pow(0.02).times(player.d.points.pow(0.02)).max(1)) + "x"
+}
+}
 ]
 
 // Determines when the game "ends"
