@@ -302,9 +302,6 @@ effectDescription() {if (hasUpgrade("d", 11)) return "which multiplies Prestige 
 									passiveGeneration() {
   },
     layerShown(){return (player.te.buyables[11].gte(1))}
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
 })
 
 addLayer("m", {
