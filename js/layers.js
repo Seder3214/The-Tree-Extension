@@ -467,9 +467,6 @@ effectDescription() {return "<br><h1>This Layer is in development</h1>"},	// Pre
 									passiveGeneration() {
   },
     layerShown(){return (player.te.buyables[11].gte(2))}
-=======
->>>>>>> bcf7d2ea53f90f735d18b2dfba5a94a701d5eeaf
->>>>>>> Stashed changes
 })
 addLayer("te", {
     name: "treeextension", // This is optional, only used in a few places, If absent it just uses the layer id.
