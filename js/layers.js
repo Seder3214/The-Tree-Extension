@@ -22,7 +22,7 @@ addLayer("p", {
 		if (player.d.unlocked) mult = mult.mul(player.d.points.pow(0.4).max(1))
 		if (player.m.unlocked) mult = mult.mul(player.m.points.pow(1.15).max(1))
 		if (hasUpgrade("p", 21)) mult = mult.mul(2)
-					if (hasUpgrade("p", 35)) mult = mult.pow(1.5)
+					if (hasUpgrade("p", 35)) mult = mult.mul(5)
 		if (hasUpgrade("d", 11)) mult = mult.mul(3)
 						if (hasUpgrade("d", 21)) mult = mult.mul(upgradeEffect("d", 21))
 		if (hasUpgrade("m", 12)) mult = mult.mul(upgradeEffect("m", 12))
@@ -1143,7 +1143,7 @@ addLayer("n", {
 		auto: true,
     }},
     color: "gray",
-    requires: new Decimal(10), // Can be a function that takes requirement increases into account
+    requires: new Decimal(5), // Can be a function that takes requirement increases into account
     resource: "Nothings", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
@@ -1151,7 +1151,8 @@ addLayer("n", {
     exponent: 0.5,	// Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-		if (player.points.gte(10)) mult = mult.mul(player.n.points.div(2)).max(1)
+		if (player.points.gte(5)) mult = mult.mul(player.n.points.div(2)).max(1)
+		if (player.n.points.gte(1000)) mult = mult.div(mult)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -1182,7 +1183,7 @@ addLayer("n", {
         direction: RIGHT,
         width: 400,
         height: 30,
-        progress() { return player.points.div(10) },
+        progress() { return player.points.div(5) },
 		display() {return "Until an Overload"},
 		fillStyle() {
 			return {
