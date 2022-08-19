@@ -332,7 +332,7 @@ addLayer("m", {
         unlocked: true,
 		points: new Decimal(0),
 		eff: new Decimal(1),
-		bp: new Decimal(0),
+		bp: new Decimal(1),
 		auto: true,
     }},
     color: "gray",
