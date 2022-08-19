@@ -60,7 +60,10 @@ function addedPlayerData() { return {
 // Display extra things at the top of the page
 var displayThings = [
 function() {
-if (hasUpgrade("d", 22)) {
+	if (hasUpgrade("m", 14)) {
+	return "Base Incremency formula: " + format(player.p.points.pow(0.02).times(player.d.points.pow(0.02)).times(player.m.points.pow(0.78)).max(1)) + "x"
+}
+else if (hasUpgrade("d", 22)) {
 	return "Base Incremency formula: " + format(player.p.points.pow(0.02).times(player.d.points.pow(0.02)).max(1)) + "x"
 }
 }

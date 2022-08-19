@@ -6,6 +6,7 @@ addLayer("p", {
         unlocked: true,
 		points: new Decimal(0),
 		eff: new Decimal(1),
+		auto: true,
     }},
     color: "#4BDC13",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
@@ -13,7 +14,9 @@ addLayer("p", {
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.5, // Prestige currency exponent
+    exponent: 0.5,
+	automate() {},
+	autoUpgrade() { return (player.te.buyables[12].gte(2) && player.p.auto)},	// Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 		if (player.d.unlocked) mult = mult.mul(player.d.points.pow(0.4).max(1))
@@ -210,6 +213,12 @@ if (hasUpgrade("p", 31)) return (hasUpgrade("p", 32)?.5:0)
 if (hasUpgrade("p", 24)) return (hasUpgrade("p", 24)?.25:0)
 else return (hasUpgrade("p", 22)?.1:0)
   },
+    		doReset(resettingLayer) {
+			if (layers[resettingLayer].row <= layers[this.layer].row) return
+			let keep = [];
+			 if (player.te.buyables[12].gte(2)) keep.push("buyables");
+			             layerDataReset("p", keep)
+		},
     layerShown(){return true}
 })
 addLayer("d", {
@@ -301,7 +310,7 @@ effectDescription() {if (hasUpgrade("d", 11)) return "which multiplies Prestige 
     ],
 									passiveGeneration() {
   },
-    layerShown(){return (player.te.buyables[11].gte(1))}
+    layerShown(){return (player.te.buyables[11].gte(2))}
 })
 
 addLayer("m", {
@@ -331,10 +340,11 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
         return new Decimal(1)
     },
 		    effect() {
-        if (!inChallenge("m", 11))
+        if (!player.m.buyables[11].gte(0))
             return new Decimal(1);
         let eff = Decimal.pow(1);
 		if (hasUpgrade("m", 11)) eff = eff.times(upgradeEffect("m", 11))
+			if (player.m.buyables[11].gte(1)) eff = eff.times(buyableEffect("m", 11))
         return eff;
     },
 		    tabFormat: {
@@ -353,7 +363,7 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
             "prestige-button",
             function() {if (player.tab == "m") return "resource-display"},
             "blank",
-            "challenges"
+            "buyables"
             ],
         },
             },
@@ -362,8 +372,8 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
 			title: "Craft a factory",
 			description: "Each delta upgrade boosts Blueprint gain",
 			cost: new Decimal(165),
-			unlocked() {return (challengeCompletions("m", 11) >= 1)},
-			effect() {let ret = Decimal.pow(1.4, player.d.upgrades.length)
+			unlocked() {return player.m.buyables[11].gte(2)},
+			effect() {let ret = Decimal.pow(1.4, player.d.upgrades.length).max(2)
 			return ret;},
 			effectDisplay() {return "" + format(upgradeEffect("m", 11)) + "x"},
 			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
@@ -373,8 +383,8 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
 										12: {
 			title: "Craft a reactor",
 			description: "Boosts prestige point gain by created crafts",
-			cost: new Decimal(360),
-			unlocked() {return (challengeCompletions("m", 11) >= 2)},
+			cost: new Decimal(3600),
+			unlocked() {return player.m.buyables[11].gte(3)},
 			effect() {let ret = Decimal.pow(1.6, player.m.upgrades.length)
 			return ret;},
 			effectDisplay() {return "" + format(upgradeEffect("m", 12)) + "x"},
@@ -383,35 +393,151 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
             currencyLayer: "m",
 	},
 									13: {
-			title: "Craft a miner robot",
+			title: "Craft a phone",
 			description: "Decrease Tree Extension cost",
-			cost: new Decimal(500),
-			unlocked() {return (challengeCompletions("m", 11) >= 2)},
+			cost: new Decimal(70000),
+			unlocked() {return player.m.buyables[11].gte(4)},
 			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
             currencyInternalName: "bp", // Use if using a nonstandard currency
             currencyLayer: "m",
 	},
+										14: {
+			title: "Craft a smartphone",
+			description: "Boost base incremental formula effect by adding machine currency into effect",
+			cost: new Decimal(1250000),
+			unlocked() {return player.m.buyables[11].gte(5)},
+			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
+            currencyInternalName: "bp", // Use if using a nonstandard currency
+            currencyLayer: "m",
+			style() {
+				return {
+					"width": "100px"
+				}
+			},
+										},
+													21: {
+			title: "Craft a monitor",
+			description: "Boost base incremental formula effect by adding machine currency into effect",
+			cost: new Decimal(10250000),
+			unlocked() {return player.m.buyables[11].gte(6)},
+			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
+            currencyInternalName: "bp", // Use if using a nonstandard currency
+            currencyLayer: "m",
+						style() {
+				return {
+					"width": "100px"
+				}
+			},
 	},
-	challenges: {
+														22: {
+			title: "Craft a Computer",
+			description: "Make blueprint effect now boosts point gain",
+			cost: new Decimal(4e9),
+			unlocked() {return player.m.buyables[11].gte(7)},
+			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
+            currencyInternalName: "bp", // Use if using a nonstandard currency
+            currencyLayer: "m",
+	},
+															23: {
+			title: "Craft a Plane",
+			description: "Start Making Blueprint robots that can speed up production",
+			cost: new Decimal(8e10),
+			unlocked() {return player.m.buyables[11].gte(8)},
+			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
+            currencyInternalName: "bp", // Use if using a nonstandard currency
+            currencyLayer: "m",
+	},
+																24: {
+			title: "Craft a Train",
+			description: "Now Make Blueprint levels adds an additional bonus to Blueprint robots effect",
+			cost: new Decimal(5e12),
+			unlocked() {return player.m.buyables[11].gte(9)},
+			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
+            currencyInternalName: "bp", // Use if using a nonstandard currency
+            currencyLayer: "m",
+	},
+																	32: {
+			title: "Craft a layer",
+			description: "Just divides TE cost for you to buy 16th :D",
+			cost: new Decimal(2e18),
+			unlocked() {return player.m.buyables[11].gte(10)},
+			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
+            currencyInternalName: "bp", // Use if using a nonstandard currency
+            currencyLayer: "m",
+									style() {
+				return {
+					"width": "240px",
+					"height": "240px"
+				}
+			},
+	},
+																		31: {
+			title: "Craft a boost",
+			description: "Aquired Blueprint robots",
+			cost: new Decimal(2e24),
+			unlocked() {return player.m.buyables[11].gte(11)},
+			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
+            currencyInternalName: "bp", // Use if using a nonstandard currency
+            currencyLayer: "m",
+			style() {
+				return {
+					"height": "240px"
+				}
+			},
+	},
+																			33: {
+			title: "Craft a miners",
+			description: "soon",
+			cost: new Decimal(2e28),
+			unlocked() {return player.m.buyables[11].gte(12)},
+			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
+            currencyInternalName: "bp", // Use if using a nonstandard currency
+            currencyLayer: "m",
+						style() {
+				return {
+					"height": "240px"
+				}
+			},
+	},
+	},
+	buyables: {
     11: {
-		completionLimit: 25,
-        name: "Start making blueprints",
-        challengeDescription() { if (challengeCompletions("m", 11) == 2) return "When you in this challenge, you should create some amount of blueprints. Now you created <h3 style='color: blue; text-shadow: 0 0 10px blue'>" + format(player.m.bp) + " / 3450</h3> Blueprints<br>"
-			if (challengeCompletions("m", 11) == 1) return "When you in this challenge, you should create some amount of blueprints. Now you created <h3 style='color: blue; text-shadow: 0 0 10px blue'>" + format(player.m.bp) + " / 265</h3> Blueprints<br>"
-			else return "When you in this challenge, you should create some amount of blueprints. You created <h3 style='color: blue; text-shadow: 0 0 10px blue'>" + format(player.m.bp) + " / 25</h3> Blueprints <br>"},
-        canComplete: function() {if (challengeCompletions("m", 11) == 2) return player.m.bp.gte(3450)
-			if (challengeCompletions("m", 11) == 1) return player.m.bp.gte(265)
-			else return player.m.bp.gte(25)},
-		goalDescription() {
-			if (challengeCompletions("m", 11) == 2) return "3450 Blueprints"
-			if (challengeCompletions("m", 11) == 1) return "265 Blueprints"
-			else return "25 Blueprints"},
-			rewardDescription() {if (challengeCompletions("m", 11) == 2) return "After second completion: Unlocks 2 crafts."
-				else return "After first completion: Unlocks first craft."},
+        cost(x) { return new Decimal(25).pow(x) },
+		purchaseLimit: 13,
+        display() {
+                let data = tmp[this.layer].buyables[this.id]
+				return "<h2><b>Make Blueprints</b></h2> <br>" + "Progress to next craft: " + format(player.m.bp) + " / " + format(data.cost) + "<br> Level: " + formatWhole(player[this.layer].buyables[this.id]) + " / 13<br> Effect: +" + format(data.effect) + " to blueprint gain <br>"},
+        canAfford() { return player.m.bp.gte(this.cost()) },
+        buy() {
+			                cost = tmp[this.layer].buyables[this.id].cost
+            setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+		effect(x) {
+			let eff = x.times(1.8).pow(x.times(1.08)).times(buyableEffect("m", 12)).max(1)
+			return eff;
+		},
+		unlocked() {return true},
     },
-},
+	    12: {
+        cost(x) { return new Decimal(1.5e21).pow(x) },
+		purchaseLimit: 5,
+        display() {
+                let data = tmp[this.layer].buyables[this.id]
+				return "<h2><b>Make Blueprint Robots</b></h2> <br>" + "Progress to next craft: " + format(player.m.bp) + " / " + format(data.cost) + "<br> Level: " + formatWhole(player[this.layer].buyables[this.id]) + " / 5<br> Effect: x" + format(data.effect) + " to blueprint gain <br>"},
+        canAfford() { return player.m.bp.gte(this.cost()) },
+        buy() {
+			                cost = tmp[this.layer].buyables[this.id].cost
+            setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+        },
+		effect(x) {
+			let eff = x.times(x.pow(x.times(x))).add(tmp.m.buyables[11].purchaseLimit)
+			return eff;
+		},
+		unlocked() {return true},
+    },
+	},
     update(diff) {
-   if (inChallenge("m", 11))
+   if (player.m.buyables[11].gte(0))
           return player.m.bp = player.m.bp.add(tmp.m.effect.times(diff))
 	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
@@ -420,7 +546,7 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
     ],
 									passiveGeneration() {
   },
-    layerShown(){return (player.te.buyables[11].gte(2))}
+    layerShown(){return (player.te.buyables[11].gte(3))}
 })
 
 addLayer("o", {
@@ -466,7 +592,7 @@ effectDescription() {return "<br><h1>This Layer is in development</h1>"},	// Pre
     ],
 									passiveGeneration() {
   },
-    layerShown(){return (player.te.buyables[11].gte(2))}
+    layerShown(){return (player.te.buyables[11].gte(5))}
 })
 addLayer("te", {
     name: "treeextension", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -486,6 +612,7 @@ addLayer("te", {
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 		if (hasUpgrade("m", 13)) mult = mult.div(1e50)
+		if (hasUpgrade("m", 32)) mult = mult.div(1e150)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -556,7 +683,7 @@ addLayer("te", {
 },
 	buyables: {
     11: {
-        cost(x) { return new Decimal(5).times(x)},
+        cost(x) { return new Decimal(4).times(x)},
 		purchaseLimit: 100,
         display() {
                 let data = tmp[this.layer].buyables[this.id]
@@ -570,15 +697,15 @@ addLayer("te", {
 		unlocked() {return hasMilestone("te", 4)},
     },
 	    12: {
-        cost(x) { return new Decimal(5).times(x)},
-		purchaseLimit: 100,
+        cost(x) { return new Decimal(100000).times(x)},
+		purchaseLimit: 2,
         display() {
                 let data = tmp[this.layer].buyables[this.id]
-				return "<h2><b>Automate Upgrades</b></h2> <br>" + "Cost: " + format(data.cost) + " Machines <br>" + "Level: " + formatWhole(player[this.layer].buyables[this.id]) + "<br>Each buyable level autobuys upgrades on 1 more layer"},
-        canAfford() { return player.m.points.gte(this.cost()) },
+				return "<h2><b>Automate PP</b></h2> <br>" + "Cost: " + format(data.cost) + " Deltas <br>" + "Level: " + formatWhole(player[this.layer].buyables[this.id]) + "<br>Automate PP layer"},
+        canAfford() { return player.d.points.gte(this.cost()) },
         buy() {
 			                cost = tmp[this.layer].buyables[this.id].cost
-            player.m.points = player.m.points.sub(this.cost())
+            player.d.points = player.d.points.sub(this.cost())
             setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
 		unlocked() {return hasMilestone("te", 4)},
