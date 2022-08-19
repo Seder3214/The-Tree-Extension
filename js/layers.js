@@ -754,7 +754,7 @@ player.o.cd = 12
 											31: {
 			title: "Prestige Quarry I",
 			description: "Unlock next mine and 10.00x to Iron and Copper Effects",
-			cost: new Decimal(70),
+			cost: new Decimal(30),
 			unlocked() {return hasUpgrade("o", 12)},
 				style() {
 					return {
