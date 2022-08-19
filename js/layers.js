@@ -869,7 +869,7 @@ addLayer("i", {
 		platinum: new Decimal(0),
     }},
     color: "violet",
-    requires: new Decimal(7e52),
+    requires: new Decimal(1e45),
 branches: ["p"],	// Can be a function that takes requirement increases into account
     resource: "Idles",
     baseResource: "points",
