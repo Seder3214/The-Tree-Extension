@@ -1133,7 +1133,7 @@ addLayer("tre", {
     hotkeys: [
         {key: "x", description: "x: Reset for Xtreension", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return true},
+    layerShown(){return (player.o.platinum.gte(1))},
 })
 
 addLayer("n", {
