@@ -539,7 +539,7 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
     },
 	},
     update(diff) {
-   if (player.m.buyables[11].gte(1))
+   if (player.m.unlocked)
           return player.m.bp = player.m.bp.add(tmp.m.effect.times(diff))
 	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
