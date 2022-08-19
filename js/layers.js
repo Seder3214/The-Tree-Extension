@@ -58,7 +58,7 @@ addLayer("p", {
 			title: "11",
 			description: "Unspent Prestige Points boosts point gain",
 			cost: new Decimal(4),
-			effect() {if (hasUpgrade("p", 35)) return player.p.points.pow(0.42).max(1.15).pow(1.44)
+			effect() {if (hasUpgrade("p", 35)) return player.p.points.pow(0.42).max(1.15).pow(1.5)
 				if (hasUpgrade("p", 31)) return player.p.points.pow(0.36).max(1.15).pow(1.4)
 				if (hasUpgrade("p", 32)) return player.p.points.pow(0.32).max(1.15).pow(1.4)
 				if (hasUpgrade("p", 32)) return player.p.points.pow(0.32).max(1.15).times(4)
@@ -72,7 +72,7 @@ if (hasUpgrade("p", 15)) return player.p.points.pow(0.22).max(1.15).times(2)
 			title: "12",
 			description: "Points boost themselves gain",
 			cost: new Decimal(8),
-			effect() {if (hasUpgrade("p", 33)) return player.points.pow(0.16).max(1).pow(1.44)
+			effect() {if (hasUpgrade("p", 33)) return player.points.pow(0.16).max(1).pow(1.5)
 				if (hasUpgrade("p", 33)) return player.points.pow(0.16).max(1).pow(1.4)
 				if (hasUpgrade("p", 25)) return player.points.pow(0.16).max(1).times(4)
 if (hasUpgrade("p", 15)) return player.points.pow(0.16).max(1).times(2)
@@ -93,7 +93,7 @@ if (hasUpgrade("p", 15)) return player.points.pow(0.16).max(1).times(2)
 			title: "14",
 			description: "Tree Expansion amount boost Point gain",
 			cost: new Decimal(23),
-			effect() {if (hasUpgrade("p", 35)) return player.te.points.pow(1.22).max(1).pow(1.44)
+			effect() {if (hasUpgrade("p", 35)) return player.te.points.pow(1.22).max(1).pow(1.5)
 				if (hasUpgrade("p", 33)) return player.te.points.pow(1.22).max(1).pow(1.4)
 				if (hasUpgrade("p", 25)) return player.te.points.pow(1.22).max(1).times(4)
 if (hasUpgrade("p", 15)) return player.te.points.pow(1.22).max(1).times(2)
