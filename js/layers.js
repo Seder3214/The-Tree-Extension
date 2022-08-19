@@ -27,6 +27,7 @@ addLayer("p", {
 		if (hasUpgrade("m", 12)) mult = mult.mul(upgradeEffect("m", 12))
 		if (player.p.buyables[11].gte(1)) mult = mult.mul(buyableEffect("p", 11))
 		if (hasUpgrade("m", 31)) mult = mult.mul(buyableEffect("m", 12).div(5))
+		if (hasUpgrade("i", 21)) mult = mult.mul(1.78e308)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -221,7 +222,9 @@ else return (hasUpgrade("p", 22)?.1:0)
 			 if (player.te.buyables[12].gte(2)) keep.push("buyables");
 			             layerDataReset("p", keep)
 		},
-    layerShown(){return true}
+    layerShown(){if (player.tre.points.gte(1)) return "ghost"
+		if (hasUpgrade("o", 24)) return "ghost"
+		else return true}
 })
 addLayer("d", {
     name: "Delta", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -316,7 +319,9 @@ effectDescription() {if (hasUpgrade("d", 11)) return "which multiplies Prestige 
 									passiveGeneration() {
 										return (player.te.buyables[13].gte(2)?1:1)
   },
-    layerShown(){return (player.te.buyables[11].gte(2))}
+    layerShown(){if (player.tre.points.gte(1)) return "ghost"
+		if (hasUpgrade("o", 24)) return "ghost"
+		else return (player.te.buyables[11].gte(2))}
 })
 
 addLayer("m", {
@@ -355,6 +360,7 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
 		if (hasUpgrade("m", 11)) eff = eff.times(upgradeEffect("m", 11))
 			if (player.m.buyables[11].gte(1)) eff = eff.times(buyableEffect("m", 11))
 				if (hasUpgrade("o", 31)) eff = eff.times(10)
+					if (hasUpgrade("i", 13)) eff = eff.pow(1.2)
         return eff;
     },
 		    tabFormat: {
@@ -495,20 +501,6 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
 				}
 			},
 	},
-																			33: {
-			title: "Craft a miners",
-			description: "soon",
-			cost: new Decimal(2e65),
-			unlocked() {return player.m.buyables[11].gte(12)},
-			currencyDisplayName: "Blueprints", // Use if using a nonstandard currency
-            currencyInternalName: "bp", // Use if using a nonstandard currency
-            currencyLayer: "m",
-						style() {
-				return {
-					"height": "240px"
-				}
-			},
-	},
 	},
 	buyables: {
     11: {
@@ -562,7 +554,9 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
 			 if (player.te.buyables[13].gte(2)) keep.push("buyables");
 			             layerDataReset("m", keep)
 		},
-    layerShown(){return (player.te.buyables[11].gte(3))}
+    layerShown(){if (player.tre.points.gte(1)) return "ghost"
+		if (hasUpgrade("o", 24)) return "ghost"
+		else return (player.te.buyables[11].gte(3))}
 })
 
 addLayer("o", {
@@ -584,13 +578,17 @@ addLayer("o", {
     }},
     color: "cyan",
     requires: new Decimal(8e30),
-branches: ["m", "d"],	// Can be a function that takes requirement increases into account
+branches: ["p"],	// Can be a function that takes requirement increases into account
     resource: "Ores",
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0.008,
-effectDescription() { if (hasUpgrade("o", 31)) return "You have " + format(player.o.iron) + " Iron, " + format(player.o.copper) + " Copper, " + format(player.o.silver) + " Silver, " + format(player.o.gold) + " Gold, <br>"+ "Iron Effect: " + format(player.o.iron.pow(1.24).times(1.34).max(1).times(10)) + "x to blueprint gain " + "<br> Copper Effect: " + format(player.o.copper.pow(0.85).times(2).times(10)) + "x to point gain" + "<br> Silver Effect: " + format(player.o.silver.pow(85).times(2)) + "x reducing cost of TE "
+effectDescription() {
+	if (hasUpgrade("o", 24)) return "You have " + format(player.o.platinum) + "<br> Platinum effect: " + format(player.o.platinum.times(3.6).pow(2.8)) + "x to nothing (You need 1 Platinum)" 
+	if (hasUpgrade("i", 13)) return "You have " + format(player.o.iron) + " Iron, " + format(player.o.copper) + " Copper, " + format(player.o.silver) + " Silver, " + format(player.o.gold) + " Gold, <br>"+ "Iron Effect: " + format(player.o.iron.pow(1.24).times(1.34).max(1).times(10).pow(1.2)) + "x to blueprint gain " + "<br> Copper Effect: " + format(player.o.copper.pow(0.85).times(2).times(10).pow(1.2)) + "x to point gain" + "<br> Silver Effect: " + format(player.o.silver.pow(85).times(2).pow(1.2)) + "x reducing cost of TE " + "<br> GOLD effect: " + format(player.o.gold.times(25)) + "x to Idles gain"
+	if (hasUpgrade("i", 13)) return "You have " + format(player.o.iron) + " Iron, " + format(player.o.copper) + " Copper, " + format(player.o.silver) + " Silver, " + format(player.o.gold) + " Gold, <br>"+ "Iron Effect: " + format(player.o.iron.pow(1.24).times(1.34).max(1).times(10).pow(1.2)) + "x to blueprint gain " + "<br> Copper Effect: " + format(player.o.copper.pow(0.85).times(2).times(10).pow(1.2)) + "x to point gain" + "<br> Silver Effect: " + format(player.o.silver.pow(85).times(2).pow(1.2)) + "x reducing cost of TE "
+if (hasUpgrade("o", 31)) return "You have " + format(player.o.iron) + " Iron, " + format(player.o.copper) + " Copper, " + format(player.o.silver) + " Silver, " + format(player.o.gold) + " Gold, <br>"+ "Iron Effect: " + format(player.o.iron.pow(1.24).times(1.34).max(1).times(10)) + "x to blueprint gain " + "<br> Copper Effect: " + format(player.o.copper.pow(0.85).times(2).times(10)) + "x to point gain" + "<br> Silver Effect: " + format(player.o.silver.pow(85).times(2)) + "x reducing cost of TE "
 	else return "You have " + format(player.o.iron) + " Iron, " + format(player.o.copper) + " Copper, " + format(player.o.silver) + " Silver, " + format(player.o.gold) + " Gold, <br>"+ "Iron Effect: " + format(player.o.iron.pow(1.24).times(1.34).max(1)) + "x to blueprint gain " + "<br> Copper Effect: " + format(player.o.copper.pow(0.85).times(2)) + "x to point gain" },	// Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
@@ -640,12 +638,26 @@ effectDescription() { if (hasUpgrade("o", 31)) return "You have " + format(playe
 				if (hasUpgrade("o", 14)) eff = eff.times(3)
         return eff;
     },
+								    goldy() {
+        if (!player.o.cd > 0)
+            return new Decimal(3);
+        let eff = new Decimal(3);
+        return eff;
+    },
+									   plat() {
+        if (!player.o.cd > 0)
+            return new Decimal(0.01);
+        let eff = new Decimal(0.01);
+		if (hasUpgrade("o", 32)) eff = eff.times(5)
+        return eff;
+    },
 							clickables: {
     11: {
 		title: "<h2>Melt Iron</h2>",
         display() {
 			return "Progress: " + format(player.o.cd) + " / 15s" + "<br> Requires: 1 Ore" + "<br> You generating " + format(tmp.o.effect.times(15)) + " Iron per melt"},
-		canClick() { return (player.o.cd == 0 && player.o.points.gte(1))},
+		canClick() { if (hasUpgrade("o", 22)) return false
+		else if (player.o.cd == 0 && player.o.points.gte(1)) return true},
 onClick() {
 	 player.o.cd = 15
 	 return player.o.points = player.o.points.sub(1)
@@ -655,7 +667,8 @@ onClick() {
 		title: "<h2>Melt Copper</h2>",
         display() {if (hasUpgrade("o", 21)) return "Progress: " + format(player.o.cd) + " / 30s" + "<br> Requires: 3 Ores" + "<br> You generating " + format(tmp.o.copeff.times(30)) + " Copper per melt"
 			else return "Progress: " + format(player.o.cd) + " / 60s" + "<br> Requires: 3 Ores" + "<br> You generating " + format(tmp.o.copeff.times(60)) + " Copper per melt"},
-		canClick() { return (player.o.cd == 0 && player.o.points.gte(3))},
+		canClick() {if (hasUpgrade("o", 14)) return false
+			else if (player.o.cd == 0 && player.o.points.gte(3)) return true},
 		unlocked() {return hasUpgrade("o", 12)},
 onClick() {
 	 if (hasUpgrade("o", 21)) player.o.cd = 30
@@ -667,12 +680,34 @@ onClick() {
 		title: "<h2>Melt Silver</h2>",
         display() {if (hasUpgrade("o", 31)) return "Progress: " + format(player.o.cd) + " / 20s" + "<br> Requires: 20 Ores" + "<br> You generating " + format(tmp.o.sileff.times(20)) + " Silver per melt"
 			else return "Progress: " + format(player.o.cd) + " / 2m" + "<br> Requires: 20 Ores" + "<br> You generating " + format(tmp.o.sileff.times(120)) + " Silver per melt"},
-		canClick() { return (player.o.cd == 0 && player.o.points.gte(20))},
+		canClick() { if (hasUpgrade("o", 23)) return false
+		else if (player.o.cd == 0 && player.o.points.gte(20)) return true},
 				unlocked() {return hasUpgrade("o", 31)},
 onClick() {
 	if (hasUpgrade("o", 13)) player.o.cd = 20
 else player.o.cd = 120
 	 return player.o.points = player.o.points.sub(20)
+},
+		},
+						    14: {
+		title: "<h2>Melt GOLD</h2>",
+        display() {return "Progress: " + format(player.o.cd) + " / 2s" + "<br> Requires: 60 Ores" + "<br> You generating " + format(tmp.o.goldy.times(20)) + " GOLD per melt"},
+		canClick() { if (hasUpgrade("o", 23)) return false
+		if (player.o.cd == 0 && player.o.points.gte(60)) return true},
+				unlocked() { return (hasUpgrade("i", 14))},
+onClick() {
+player.o.cd = 2
+	 return player.o.points = player.o.points.sub(60)
+},
+		},
+								    21: {
+		title: "<h2>Melt PLATINUM</h2>",
+        display() {return "Progress: " + format(player.o.cd) + " / 12s" + "<br> Requires: 0.7e9 Ores" + "<br> You generating " + format(tmp.o.plat.times(12)) + " PLATINUM per melt"},
+		canClick() { if (player.o.cd == 0 && player.o.points.gte(.7e9)) return true},
+				unlocked() { return (hasUpgrade("o", 24))},
+onClick() {
+player.o.cd = 12
+	 return player.o.points = player.o.points.sub(0.7e9)
 },
 		},
     },
@@ -727,6 +762,20 @@ else player.o.cd = 120
 					}
 				},
 	},
+												32: {
+			title: "Prestige Quarry II",
+			description: "Spaceshift platinum and made boost 5.00x stronger",
+			cost: new Decimal(0.5),
+			unlocked() {return hasUpgrade("o", 24)},
+				style() {
+					return {
+						"width": "240px"
+					}
+				},
+										currencyDisplayName: "Platinum", // Use if using a nonstandard currency
+            currencyInternalName: "platinum", // Use if using a nonstandard currency
+            currencyLayer: "o",
+	},
 												13: {
 			title: "Silver Quarry I",
 			description: "Set the Melt Silver progress time to 20 secs, but reduce Silver production by 2.00x",
@@ -738,23 +787,56 @@ else player.o.cd = 120
 											},
 					14: {
 			title: "Silver Quarry II",
-			description: "Unlock new Mine and boost Silver producing by Mines amount (3.00x)",
+			description: "After buying this upgrade you cant Melt Iron and Copper. Boost Silver producing by Mines amount (3.00x) and auto-produce iron and copper",
 			cost: new Decimal(30),
 			unlocked() {return hasUpgrade("o", 12)},
 						currencyDisplayName: "Silver", // Use if using a nonstandard currency
             currencyInternalName: "silver", // Use if using a nonstandard currency
             currencyLayer: "o",
 											},
+																23: {
+			title: "GOLD Quarry I",
+			description: "After buying this upgrade you cant Melt Silver and GOLD. Auto-produce gold",
+			cost: new Decimal(500000000),
+			unlocked() {return hasUpgrade("o", 12)},
+
+											},
+																											24: {
+			title: "GOLD Quarry II",
+			description: "Remove all the layers except I and O but unlock last mine",
+			cost: new Decimal(1000),
+			unlocked() {return hasUpgrade("o", 12)},
+									currencyDisplayName: "Gold", // Use if using a nonstandard currency
+            currencyInternalName: "gold", // Use if using a nonstandard currency
+            currencyLayer: "o",
+
+											},
 		},
 	    update(diff) {
-					    if (player.o.cd > 0) player.o.cd = Math.max(0,player.o.cd - diff)	
+					    if (player.o.cd > 0) player.o.cd = Math.max(0, player.o.cd - diff) 
 		
+			if (hasUpgrade("o", 24) && player.o.cd > 0)	return player.o.platinum = player.o.platinum.add(tmp.o.plat.times(diff))
+	
+					if (hasUpgrade("o", 23) && player.o.cd <= 0)  {
+player.o.copper = player.o.copper.add(tmp.o.copeff.times(diff))	
+player.o.iron = player.o.iron.add(tmp.o.effect.times(diff))
+player.o.gold = player.o.gold.add(tmp.o.goldy.times(diff))
+player.o.silver = player.o.silver.add(tmp.o.sileff.times(diff))
+				}
+	
+				if (hasUpgrade("o", 14) && player.o.cd <= 0)  {
+player.o.copper = player.o.copper.add(tmp.o.copeff.times(diff))	
+player.o.iron = player.o.iron.add(tmp.o.effect.times(diff))
+				}
+	
+		if (hasUpgrade("i", 14) && player.o.cd > 0)	return player.o.gold = player.o.gold.add(tmp.o.goldy.times(diff))
+	
 	if (hasUpgrade("o", 31) && player.o.cd > 0)	return player.o.silver = player.o.silver.add(tmp.o.sileff.times(diff))	
 	
 	if (hasUpgrade("o", 22) && player.o.cd > 0)	return player.o.copper = player.o.copper.add(tmp.o.copeff.times(diff))	
 
 		
-			if (hasUpgrade("o", 22)) return player.o.iron = player.o.iron.add(tmp.o.effect.times(diff))	
+			if (hasUpgrade("o", 22) && player.o.cd <= 0) return player.o.iron = player.o.iron.add(tmp.o.effect.times(diff))	
 				
 if (player.o.cd > 0 && hasUpgrade("o", 12))  return player.o.copper = player.o.copper.add(tmp.o.copeff.times(diff))	
 
@@ -766,7 +848,8 @@ if (player.o.cd > 0 && player.o.cd < 60)  return player.o.iron = player.o.iron.a
     ],
 									passiveGeneration() {
   },
-    layerShown(){return (player.te.buyables[11].gte(4))}
+    layerShown(){if (player.tre.points.gte(1)) return "ghost"
+		else return (player.te.buyables[11].gte(4))}
 })
 addLayer("i", {
     name: "Idles", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -786,16 +869,20 @@ addLayer("i", {
 		platinum: new Decimal(0),
     }},
     color: "violet",
-    requires: new Decimal(1e55),
-branches: ["m", "d"],	// Can be a function that takes requirement increases into account
+    requires: new Decimal(7e52),
+branches: ["p"],	// Can be a function that takes requirement increases into account
     resource: "Idles",
     baseResource: "points",
 effectDescription() {return "<br><h2>IN DEV</h2>"},	// Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.008,
+    exponent: 0.001,
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+		if (hasUpgrade("i", 11)) mult = mult.mul(player.te.points).max(1)
+		if (hasUpgrade("i", 12)) mult = mult.mul(5)
+		if (hasUpgrade("i", 13)) mult = mult.div(mult)
+					if (player.o.gold.gte(1)) mult = mult.mul(player.o.gold.times(25))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -805,18 +892,53 @@ effectDescription() {return "<br><h2>IN DEV</h2>"},	// Name of resource prestige
         "Idles": {
             content:[
                 function() {if (player.tab == "i") return "main-display"},
-            "prestige-button",
             function() {if (player.tab == "i") return "resource-display"},
             "blank",
-            "clickables"
+            "upgrades"
             ],
         },
             },
+			upgrades: {
+															11: {
+			title: "11",
+			description: "So... TE amount boost Idles gain",
+			cost: new Decimal(20),
+			unlocked() {return true},
+											},
+																		12: {
+			title: "12",
+			description: "Take a little useless boost (5.00x to Idles gain)",
+			cost: new Decimal(560),
+			unlocked() {return hasUpgrade("i", 11)},
+											},
+																	13: {
+			title: "13",
+			description: "Take a break and spend all of your Idles to this upgrade... But boost all of Mines effects by ^1.2",
+			cost() {return player.i.points},
+			unlocked() {return hasUpgrade("i", 12)},
+											},
+																		14: {
+			title: "14",
+			description: "Yeah... That was rude. Unlock a new mine",
+			cost: new Decimal(60),
+			unlocked() {return hasUpgrade("i", 13)},
+											},
+				21: {
+			title: "DESTRUCTION",
+			description: "BOOSTS YOUR POINT GAIN BY INFINITY",
+			cost: new Decimal(17800),
+			unlocked() {return hasUpgrade("i", 14)},
+											},
+			},
+												passiveGeneration() {
+ return (player.points.gte(1e53)?1:1)
+												},
 			    row: 2, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "p", description: "i: Reset for Idles", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return (player.te.buyables[11].gte(5))}
+    layerShown(){if (player.tre.points.gte(1)) return "ghost"
+		else return (player.te.buyables[11].gte(5))}
 })
 addLayer("te", {
     name: "treeextension", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -838,10 +960,13 @@ addLayer("te", {
 		if (hasUpgrade("m", 13)) mult = mult.div(1e50)
 		if (hasUpgrade("m", 32)) mult = mult.div(1e150)
 			if (player.o.silver.gte(1)) mult = mult.div(player.o.silver.pow(85).times(2))
+				if (hasUpgrade("i", 13)) mult = mult.div(player.o.silver.pow(45).times(1.2))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
+		        exp = new Decimal(1)
+					return exp
     },
 	    tabFormat: {
         "Milestones": {
@@ -910,7 +1035,7 @@ addLayer("te", {
 	buyables: {
     11: {
         cost(x) { return new Decimal(4).times(x)},
-		purchaseLimit: 100,
+		purchaseLimit: 10,
         display() {
                 let data = tmp[this.layer].buyables[this.id]
 				return "<h2><b>Layer Extension</b></h2> <br>" + "Cost: " + format(data.cost) + " Tree Extensions <br>" + "Level: " + formatWhole(player[this.layer].buyables[this.id]) + "<br> Unlocks a layer."},
@@ -955,5 +1080,145 @@ addLayer("te", {
     hotkeys: [
         {key: "e", description: "e: Reset for Extreension", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return true}
+    layerShown(){if (player.tre.points.gte(1)) return "ghost"
+		else return true}
+})
+
+addLayer("tre", {
+    name: "treeextension", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "TE", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+    }},
+    color: "white",
+    requires: new Decimal(1e308), // Can be a function that takes requirement increases into account
+    resource: "Tree Extreensions", // Name of prestige currency
+    baseResource: "prestige points", // Name of resource prestige is based on
+    baseAmount() {return player.p.points}, // Get the current amount of baseResource
+    type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 4, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+	    tabFormat: {
+        "Milestones": {
+        content:[
+            function() {if (player.tab == "tre") return "main-display"},
+            "prestige-button",
+            function() {if (player.tab == "tre") return "resource-display"},
+            "blank",
+            "milestones"
+            ]
+        },
+            },
+	milestones: {
+    0: {
+        requirementDescription: "1 Extreensions",
+        effectDescription: "Just start a game with only new one layer",
+        done() { return player.tre.points.gte(1) }
+    },
+},
+		    row: 3, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "x", description: "x: Reset for Xtreension", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return true},
+})
+
+addLayer("n", {
+    name: "Nothings", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "N", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+		eff: new Decimal(1),
+		auto: true,
+    }},
+    color: "gray",
+    requires: new Decimal(10), // Can be a function that takes requirement increases into account
+    resource: "Nothings", // Name of prestige currency
+    baseResource: "points", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0.5,	// Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+		if (player.points.gte(10)) mult = mult.mul(player.n.points.div(5))
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+		    tabFormat: {
+        "Nothing": {
+        content:[
+            function() {if (player.tab == "n") return "main-display"},
+            "prestige-button",
+            function() {if (player.tab == "n") return "resource-display"},
+            "blank",
+            ['bar', 'bigBar'],
+			"blank",
+			['bar', 'collapse']
+            ]
+            },
+			        "Something": {
+        content:[
+            function() {if (player.tab == "n") return "main-display"},
+            function() {if (player.tab == "n") return "resource-display"},
+            "blank"
+            ]
+            },
+			},
+			bars: {
+				    bigBar: {
+        direction: RIGHT,
+        width: 400,
+        height: 30,
+        progress() { return player.points.div(10) },
+		display() {return "Until an Overload"},
+		fillStyle() {
+			return {
+			'background-color':'gray'
+			}
+		},	
+    },
+					    collapse: {
+        direction: RIGHT,
+        width: 400,
+        height: 30,
+        progress() { return player.n.points.div(1000) },
+		display() {return "Until collapsing something"},
+		fillStyle() {
+			return {
+			'background-color':'gray'
+			}
+		},	
+    },
+			},
+	upgrades: {
+		11: {
+			title: "11",
+			description: "Unspent Prestige Points boosts point gain",
+			cost: new Decimal(4),
+			unlocked() {return hasMilestone("tre", 1)},
+		},
+	},
+    		doReset(resettingLayer) {
+			if (layers[resettingLayer].row <= layers[this.layer].row) return
+			let keep = [];
+			 if (player.te.buyables[12].gte(2)) keep.push("buyables");
+			             layerDataReset("n", keep)
+		},
+		    row: 0, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "n", description: "n: Reset for Nothing", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return (hasMilestone("tre", 0))},
 })

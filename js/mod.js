@@ -51,6 +51,8 @@ if (hasUpgrade("p", 23)) gain = gain.div(.5)
 	if (hasUpgrade("d", 22)) gain = gain.times(player.p.points.pow(0.02).times(player.d.points.pow(0.02))).max(2)
 		if (player.o.copper.gte(1)) gain = gain.times(player.o.iron.pow(1.24).times(1.34).max(1))
 				if (hasUpgrade("o", 31)) gain = gain.times(10)
+									if (hasUpgrade("i", 13)) gain = gain.pow(1.2)
+if (player.tre.points.gte(1)) gain = gain.div(gain)
 
 	return gain
 }
