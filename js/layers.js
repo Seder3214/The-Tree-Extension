@@ -556,7 +556,7 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
 		},
     layerShown(){if (player.tre.points.gte(1)) return "ghost"
 		if (hasUpgrade("o", 24)) return "ghost"
-		else return (player.te.buyables[11].gte(3))}
+		else return (player.te.buyables[13].gte(2))}
 })
 
 addLayer("o", {
