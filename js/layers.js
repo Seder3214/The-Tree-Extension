@@ -680,7 +680,7 @@ onClick() {
 		title: "<h2>Melt Silver</h2>",
         display() {if (hasUpgrade("o", 31)) return "Progress: " + format(player.o.cd) + " / 20s" + "<br> Requires: 20 Ores" + "<br> You generating " + format(tmp.o.sileff.times(20)) + " Silver per melt"
 			else return "Progress: " + format(player.o.cd) + " / 2m" + "<br> Requires: 20 Ores" + "<br> You generating " + format(tmp.o.sileff.times(120)) + " Silver per melt"},
-		canClick() { if (hasUpgrade("o", 23)) return false
+		canClick() { if (hasUpgrade("o", 21)) return false
 		else if (player.o.cd == 0 && player.o.points.gte(20)) return true},
 				unlocked() {return hasUpgrade("o", 31)},
 onClick() {
@@ -692,7 +692,7 @@ else player.o.cd = 120
 						    14: {
 		title: "<h2>Melt GOLD</h2>",
         display() {return "Progress: " + format(player.o.cd) + " / 2s" + "<br> Requires: 60 Ores" + "<br> You generating " + format(tmp.o.goldy.times(20)) + " GOLD per melt"},
-		canClick() { if (hasUpgrade("o", 23)) return false
+		canClick() { if (hasUpgrade("o", 22)) return false
 		if (player.o.cd == 0 && player.o.points.gte(60)) return true},
 				unlocked() { return (hasUpgrade("i", 14))},
 onClick() {
@@ -804,7 +804,7 @@ player.o.cd = 12
 																											24: {
 			title: "GOLD Quarry II",
 			description: "Remove all the layers except I and O but unlock last mine",
-			cost: new Decimal(1000),
+			cost: new Decimal(300),
 			unlocked() {return hasUpgrade("o", 12)},
 									currencyDisplayName: "Gold", // Use if using a nonstandard currency
             currencyInternalName: "gold", // Use if using a nonstandard currency
