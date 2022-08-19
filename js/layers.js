@@ -311,7 +311,7 @@ effectDescription() {if (hasUpgrade("d", 11)) return "which multiplies Prestige 
 },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "p", description: "d: Reset for Delta", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {
 										return (player.te.buyables[13].gte(2)?1:1)
@@ -552,7 +552,7 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
 	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "p", description: "m: Reset for Machines", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {
   },
@@ -762,7 +762,7 @@ if (player.o.cd > 0 && player.o.cd < 60)  return player.o.iron = player.o.iron.a
 		},
     row: 2, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "p", description: "o: Reset for Ores", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {
   },
@@ -814,7 +814,7 @@ effectDescription() {return "<br><h2>IN DEV</h2>"},	// Name of resource prestige
             },
 			    row: 2, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "p", description: "i: Reset for Idles", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return (player.te.buyables[11].gte(5))}
 })
@@ -953,7 +953,7 @@ addLayer("te", {
 	},
     row: "side", // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "e", description: "e: Reset for Extreension", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return true}
 })
