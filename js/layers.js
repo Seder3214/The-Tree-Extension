@@ -22,6 +22,7 @@ addLayer("p", {
 		if (player.d.unlocked) mult = mult.mul(player.d.points.pow(0.4).max(1))
 		if (player.m.unlocked) mult = mult.mul(player.m.points.pow(1.15).max(1))
 		if (hasUpgrade("p", 21)) mult = mult.mul(2)
+					if (hasUpgrade("p", 35)) mult = mult.pow(1.5)
 		if (hasUpgrade("d", 11)) mult = mult.mul(3)
 						if (hasUpgrade("d", 21)) mult = mult.mul(upgradeEffect("d", 21))
 		if (hasUpgrade("m", 12)) mult = mult.mul(upgradeEffect("m", 12))
@@ -167,7 +168,7 @@ else return "2.00x"},
 		},
 				35: {
 			title: "35",
-			description: "Power up <b>15</b> exponential effect",
+			description: "Power up <b>15</b> exponential effect and apply it to PP gain",
 			cost: new Decimal(.3e15),
 			unlocked() {return hasUpgrade("d", 13)},
 		},
