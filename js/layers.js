@@ -22,7 +22,6 @@ addLayer("p", {
 		if (player.d.unlocked) mult = mult.mul(player.d.points.pow(0.4).max(1))
 		if (player.m.unlocked) mult = mult.mul(player.m.points.pow(1.15).max(1))
 		if (hasUpgrade("p", 21)) mult = mult.mul(2)
-					if (hasUpgrade("p", 35)) mult = mult.mul(5)
 		if (hasUpgrade("d", 11)) mult = mult.mul(3)
 						if (hasUpgrade("d", 21)) mult = mult.mul(upgradeEffect("d", 21))
 		if (hasUpgrade("m", 12)) mult = mult.mul(upgradeEffect("m", 12))
@@ -209,7 +208,7 @@ else return "2.00x"},
 },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "p", description: "p: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {
 if (player.te.buyables[12].gte(2)) return (hasUpgrade("p", 32)?1:1)	
@@ -315,7 +314,7 @@ effectDescription() {if (hasUpgrade("d", 11)) return "which multiplies Prestige 
 },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "d: Reset for Delta", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "d", description: "d: Reset for Delta", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {
 										if (player.te.buyables[13].gte(2))return (player.te.buyables[13].gte(2)?1:1)
@@ -540,12 +539,12 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
     },
 	},
     update(diff) {
-   if (player.m.buyables[11].gte(0))
+   if (player.m.buyables[11].gte(1))
           return player.m.bp = player.m.bp.add(tmp.m.effect.times(diff))
 	},
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "m: Reset for Machines", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "m", description: "m: Reset for Machines", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {
   },
@@ -755,7 +754,7 @@ player.o.cd = 12
 											31: {
 			title: "Prestige Quarry I",
 			description: "Unlock next mine and 10.00x to Iron and Copper Effects",
-			cost: new Decimal(10),
+			cost: new Decimal(70),
 			unlocked() {return hasUpgrade("o", 12)},
 				style() {
 					return {
@@ -1060,7 +1059,7 @@ addLayer("te", {
             player.d.points = player.d.points.sub(this.cost())
             setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
-		unlocked() {return hasMilestone("te", 4)},
+		unlocked() {return (hasMilestone("te", 5))},
     },
 		    13: {
         cost(x) { return new Decimal(1).times(x)},
@@ -1074,7 +1073,7 @@ addLayer("te", {
             player.o.points = player.o.points.sub(this.cost())
             setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
-		unlocked() {return hasMilestone("te", 4)},
+		unlocked() {return (hasMilestone("te", 5))},
     },
 	},
     row: "side", // Row the layer is in on the tree (0 is the first row)
@@ -1124,8 +1123,13 @@ addLayer("tre", {
         effectDescription: "Just start a game with only new one layer",
         done() { return player.tre.points.gte(1) }
     },
+	    1: {
+        requirementDescription: "2 Extreensions",
+        effectDescription: "Electrical layer!!!",
+        done() { return player.tre.points.gte(2) }
+    },
 },
-		    row: 3, // Row the layer is in on the tree (0 is the first row)
+		    row: 6, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "x", description: "x: Reset for Xtreension", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
@@ -1140,6 +1144,13 @@ addLayer("n", {
         unlocked: true,
 		points: new Decimal(0),
 		eff: new Decimal(1),
+		sm: new Decimal(0),
+		et: new Decimal(0),
+		ot: new Decimal(0),
+		cc: new Decimal(1000),
+		oc: new Decimal(100),
+		fc: new Decimal(0),
+		limit: new Decimal(0),
 		auto: true,
     }},
     color: "gray",
@@ -1151,8 +1162,9 @@ addLayer("n", {
     exponent: 0.5,	// Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-		if (player.points.gte(5)) mult = mult.mul(player.n.points.div(2)).max(1)
-		if (player.n.points.gte(1000)) mult = mult.div(mult)
+		if (player.points.gte(player.n.sm.pow(0.95).times(5)) && hasUpgrade("n", 12)) mult = mult.mul(player.n.points.times(4)).max(1)
+			else if (player.points.gte(5)) mult = mult.mul(player.n.points.times(1.3)).max(1)
+				if (player.n.points.gte(player.n.cc.times(upgradeEffect("n", 13)).times(upgradeEffect("n", 14)))) mult = mult.div(mult)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -1165,26 +1177,69 @@ addLayer("n", {
             "prestige-button",
             function() {if (player.tab == "n") return "resource-display"},
             "blank",
-            ['bar', 'bigBar'],
+            ['bar', 'overload'],
 			"blank",
-			['bar', 'collapse']
+			['bar', 'collapse'],
+			"blank",
+			['bar', 'fade'],
+			                ["display-text", 
+                   "Overload - The Overload System works like that: <br> If you got overloaded (fully filled bar) you'll gain much more nothings than if you try to gain them before getting Overloaded",
+                ],
+				"blank",
+				['display-text',
+				 "Collapsing - The Collapsing System works like that: <br> If you got fully filled Collapse bar, your nothing gain will be decreased up to +1 nothing per reset. So, to get more profit, you should obtain nothing as much close to collapse filled bar and after that reset (with getting overloaded) to gain really huge amount of nothings"
+				 ]
             ]
             },
 			        "Something": {
         content:[
-            function() {if (player.tab == "n") return "main-display"},
-            function() {if (player.tab == "n") return "resource-display"},
-            "blank"
+            function() {if (player.tab == "n") return [ "column", 
+            [
+                ["display-text", 
+                   "You have <h2 style='color: gray; text-shadow: 0 0 10px gray'>" + format(player.n.sm) + "</h2> Somethings",
+                ],
+				"blank",
+										                ["display-text", 
+                   "You spended " + format(player.n.ot) + "s while beeing overloaded",
+                ],
+				"clickables",
+				"blank",
+				["upgrades", [1,2]]
             ]
-            },
+        ]
+			},		
+		] 
+			},
+						        "Everything": {
+				unlocked() {return (hasUpgrade("n", 24))},
+        content:[
+            function() {if (player.tab == "n") return [ "column", 
+            [
+                ["display-text", 
+                   "You have <h2 style='color: gray; text-shadow: 0 0 10px gray'>" + format(player.n.et) + "</h2> Everythings",
+                ],
+				"blank",
+										                ["display-text", 
+                   "You spended " + format(player.n.ot) + "s while beeing overloaded",
+                ],
+				"blank",
+				["upgrades", [3]],
+				"milestones"
+            ]
+        ]
+			},		
+		] 
+
+			},
 			},
 			bars: {
-				    bigBar: {
+				    overload: {
         direction: RIGHT,
         width: 400,
         height: 30,
-        progress() { return player.points.div(5) },
-		display() {return "Until an Overload"},
+        progress() {if (hasUpgrade("n", 12)) return player.points.div(player.n.sm.pow(0.95)).div(5).min(100)
+			else return (player.points.div(5)) },
+		display() {return "Until an Overload (" + format(player.n.oc.times(player.n.sm.pow(0.95).times(5))) + " Points)"},
 		fillStyle() {
 			return {
 			'background-color':'gray'
@@ -1195,8 +1250,22 @@ addLayer("n", {
         direction: RIGHT,
         width: 400,
         height: 30,
-        progress() { return player.n.points.div(1000) },
-		display() {return "Until collapsing something"},
+        progress() { if (hasUpgrade("n", 14)) return player.n.points.div(1000).div(player.n.sm.pow(0.45)).div(player.n.ot.pow(0.15).max(1))
+		else if (hasUpgrade("n", 13)) return player.n.points.div(1000).div(player.n.sm.pow(0.45))
+	else return player.n.points.div(1000) },
+		display() { return "Until collapsing something (" + format(player.n.cc.times(upgradeEffect("n", 13)).times(upgradeEffect("n", 14))) + " Nothings)"},
+		fillStyle() {
+			return {
+			'background-color':'gray'
+			}
+		},	
+    },
+						    fade: {
+        direction: RIGHT,
+        width: 400,
+        height: 30,
+        progress() {  return player.n.sm.div(.5e7) },
+		display() {return "Until fading activation (5000000 Somethings)"},
 		fillStyle() {
 			return {
 			'background-color':'gray'
@@ -1205,22 +1274,162 @@ addLayer("n", {
     },
 			},
 	upgrades: {
-		11: {
+				11: {
 			title: "11",
-			description: "Unspent Prestige Points boosts point gain",
-			cost: new Decimal(4),
-			unlocked() {return hasMilestone("tre", 1)},
+			description() {return "Now if you not overloaded, you will gain a " + format(player.n.points.pow(0.55).times(upgradeEffect("n", 22)).max(1)) + "x boost to point gain based on nothings"},
+			cost: new Decimal(10),
+			unlocked() {return true},
+			currencyDisplayName: "Somethings", // Use if using a nonstandard currency
+            currencyInternalName: "sm", // Use if using a nonstandard currency
+            currencyLayer: "n",
+		},
+		12: {
+			title: "12",
+			description() {return "The Overload starts " + format(player.n.sm.pow(0.95).min(player.n.oc.times(upgradeEffect("n", 21)))) + "x later by Something amount"},
+			cost: new Decimal(80),
+			unlocked() {return true},
+			currencyDisplayName: "Somethings", // Use if using a nonstandard currency
+            currencyInternalName: "sm", // Use if using a nonstandard currency
+            currencyLayer: "n",
+		},
+				13: {
+			title: "13",
+			description() {return "The Collapsing starts " + format(player.n.sm.pow(0.45)) + "x later by Something amount"},
+			cost: new Decimal(340),
+			unlocked() {return true},
+			currencyDisplayName: "Somethings", // Use if using a nonstandard currency
+            currencyInternalName: "sm", // Use if using a nonstandard currency
+            currencyLayer: "n",
+			effect() {return player.n.sm.pow(0.45).max(1)},
+		},
+						14: {
+			title: "14",
+			description() {return "Add an additional <b>Collapse Later</b> " + format(player.n.ot.pow(0.15).max(1)) + "x bonus based on time spended at the overloading"},
+			cost: new Decimal(3260),
+			unlocked() {return true},
+			currencyDisplayName: "Somethings", // Use if using a nonstandard currency
+            currencyInternalName: "sm", // Use if using a nonstandard currency
+            currencyLayer: "n",
+			effect() {return player.n.ot.pow(0.15).max(1)},
+		},
+								21: {
+			title: "21",
+			description() {return "Makes <b>12</b> softcap goes " + format(upgradeEffect("n", 21)) + "x later by upgrades amount"},
+			cost: new Decimal(42300),
+			unlocked() {return true},
+			currencyDisplayName: "Somethings", // Use if using a nonstandard currency
+            currencyInternalName: "sm", // Use if using a nonstandard currency
+            currencyLayer: "n",
+			effect() {let ret = Decimal.pow(1.12, player.n.upgrades.length).max(1)
+			return ret;},
+		},
+										22: {
+			title: "22",
+			description() {return "Boosts <b>11</b> effect by " + format(upgradeEffect("n", 22)) + "x based on overloaded time and points"},
+			cost: new Decimal(128000),
+			unlocked() {return true},
+			currencyDisplayName: "Somethings", // Use if using a nonstandard currency
+            currencyInternalName: "sm", // Use if using a nonstandard currency
+            currencyLayer: "n",
+			effect() {return player.n.ot.div(25).times(player.points.pow(0.01).max(1))},
+		},
+												23: {
+			title: "23",
+			description() {return "Apply <b>13</b> effect to point gain"},
+			cost: new Decimal(3e9),
+			unlocked() {return true},
+			currencyDisplayName: "Somethings", // Use if using a nonstandard currency
+            currencyInternalName: "sm", // Use if using a nonstandard currency
+            currencyLayer: "n",
+		},
+														24: {
+			title: "24",
+			description() {return "Apply <b>12</b> squared effect to point gain"},
+			cost: new Decimal(1e10),
+			unlocked() {return true},
+			currencyDisplayName: "Somethings", // Use if using a nonstandard currency
+            currencyInternalName: "sm", // Use if using a nonstandard currency
+            currencyLayer: "n",
+		},
+					31: {
+			title: "31",
+			description() {return "Boost point gain by each N layer upgrades by " + format(upgradeEffect("n", 31)) + "x"},
+			cost: new Decimal(25),
+			unlocked() {return true},
+			currencyDisplayName: "Everythings", // Use if using a nonstandard currency
+            currencyInternalName: "et", // Use if using a nonstandard currency
+            currencyLayer: "n",
+			effect() {let ret = Decimal.pow(2.3, player.n.upgrades.length)
+			return ret;},
+		},
+							32: {
+			title: "32",
+			description() {return "Tired of this layer? Lemme fix this!"},
+			cost: new Decimal(65),
+			unlocked() {return true},
+			currencyDisplayName: "Everythings", // Use if using a nonstandard currency
+            currencyInternalName: "et", // Use if using a nonstandard currency
+            currencyLayer: "n",
+			effect() {let ret = Decimal.pow(2.3, player.n.upgrades.length)
+			return ret;},
 		},
 	},
+	clickables: {
+								    11: {
+		title: "<h3>Reset for Something</h3>",
+        display() {return "You will gain: " + format(player.n.points.div(1000).times(3)) + " / 12s" + "<br> Requires: 1000 Nothings"},
+		canClick() { if (player.n.points.gte(1000)) return true},
+				unlocked() { return true},
+onClick() {
+	if (player.n.fc > 0) player.n.sm = player.n.sm.add(player.n.points.div(1000)).times(3).times(15)
+	else player.n.sm = player.n.sm.add(player.n.points.div(1000).times(3))
+	return player.n.points = player.n.points.sub(player.n.points) },
+
+	},
+									    12: {
+		title() {return "<h3>Activate Fading </h3>"},
+        display() {return  "(Skill works: " + format(player.n.fc) +" seconds) <br>" + "15.00x to Something gain <br> Can be used only 3 times (" + format(player.n.limit) + "/3)" },
+		canClick() { if (player.n.sm.gte(.5e7) && (player.n.fc <= 0) && (player.n.limit < 3)) return true},
+				unlocked() { return true},
+onClick() {
+	player.n.fc = 5
+	player.n.limit.add(1)
+	return player.n.sm = player.n.sm.sub(.5e7) },
+
+	},
+	},
+		milestones: {
+    0: {
+        requirementDescription: "100 Everythings",
+        effectDescription: "So... Speed up point gain by 1e50x",
+        done() { return player.n.et.gte(100) }
+    },
+	    1: {
+        requirementDescription: "150 Everythings",
+        effectDescription: "So... Double previous milestone",
+        done() { return player.n.et.gte(150) }
+    },
+		    2: {
+        requirementDescription: "308 Everythings",
+        effectDescription: "Make this layer ends with inflation!",
+        done() { return player.n.et.gte(308) }
+    },
+		},
     		doReset(resettingLayer) {
 			if (layers[resettingLayer].row <= layers[this.layer].row) return
 			let keep = [];
 			 if (player.te.buyables[12].gte(2)) keep.push("buyables");
 			             layerDataReset("n", keep)
 		},
-		    row: 0, // Row the layer is in on the tree (0 is the first row)
+		update(diff) {
+						if (hasUpgrade("n", 24)) player.n.et = player.n.et.add(diff)
+			if (player.n.fc > 0) player.n.fc = Math.max(0, player.n.fc - diff)
+			if (player.points.gte(player.n.sm.pow(0.95).times(5))) return player.n.ot = player.n.ot.add(diff)
+		},
+		    row: 4, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         {key: "n", description: "n: Reset for Nothing", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return (hasMilestone("tre", 0))},
+    layerShown(){if (hasMilestone("tre", 1)) return false
+		else if (hasMilestone("tre", 0)) return true},
 })

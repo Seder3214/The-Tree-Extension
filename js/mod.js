@@ -7,13 +7,13 @@ let modInfo = {
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (2), // Used for hard resets and new players
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 1,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.129",
+	num: "0.236",
 	name: "Xtreensions!",
 }
 
@@ -53,7 +53,13 @@ if (hasUpgrade("p", 23)) gain = gain.div(.5)
 				if (hasUpgrade("o", 31)) gain = gain.times(10)
 									if (hasUpgrade("i", 13)) gain = gain.pow(1.2)
 if (player.tre.points.gte(1)) gain = gain.div(gain)
-
+if (hasUpgrade("n", 11) && player.n.points.lte(player.n.cc.times(upgradeEffect("n", 13)).times(upgradeEffect("n", 14)))) gain = gain.times(player.n.points.pow(0.55).times(upgradeEffect("n", 22)).max(1))
+	if (hasUpgrade("n", 23)) gain = gain.times(player.n.sm.pow(0.45))
+		if (hasUpgrade("n", 24)) gain = gain.times(player.n.sm.pow(0.95).min(player.n.oc.times(upgradeEffect("n", 21))).pow(2))
+		if (hasUpgrade("n", 31)) gain = gain.times(upgradeEffect("n", 31))
+			if (hasMilestone("n", 0)) gain = gain.times(1e50)
+			if (hasMilestone("n", 1)) gain = gain.times(1e50)
+						if (hasMilestone("n", 1)) gain = gain.times(player.points).max(1)
 	return gain
 }
 
