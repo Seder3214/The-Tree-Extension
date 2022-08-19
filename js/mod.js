@@ -13,12 +13,12 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.052",
-	name: "Machine Extreension!",
+	num: "0.095",
+	name: "Ores Extreension!",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.052</h3><br>
+	<h3>v0.095</h3><br>
 <h2>I believe that I don't use it...</h2>.`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
@@ -49,6 +49,8 @@ function getPointGen() {
 	if (hasUpgrade("p", 21)) gain = gain.div(1.25)
 if (hasUpgrade("p", 23)) gain = gain.div(.5)
 	if (hasUpgrade("d", 22)) gain = gain.times(player.p.points.pow(0.02).times(player.d.points.pow(0.02))).max(2)
+		if (player.o.copper.gte(1)) gain = gain.times(player.o.iron.pow(1.24).times(1.34).max(1))
+				if (hasUpgrade("o", 31)) gain = gain.times(10)
 
 	return gain
 }
