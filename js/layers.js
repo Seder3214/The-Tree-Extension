@@ -557,7 +557,7 @@ effectDescription() {return "which multiplies Prestige Point gain by " + format(
 		},
     layerShown(){if (player.tre.points.gte(1)) return "ghost"
 		if (hasUpgrade("o", 24)) return "ghost"
-		else return (player.te.buyables[13].gte(2))}
+		else return (player.te.buyables[11].gte(3))}
 })
 
 addLayer("o", {
@@ -955,7 +955,7 @@ addLayer("te", {
     baseResource: "prestige points", // Name of resource prestige is based on
     baseAmount() {return player.p.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 2.4, // Prestige currency exponent
+    exponent: 2.2, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 		if (hasUpgrade("m", 13)) mult = mult.div(1e50)
