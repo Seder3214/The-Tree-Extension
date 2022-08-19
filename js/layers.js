@@ -318,11 +318,11 @@ effectDescription() {if (hasUpgrade("d", 11)) return "which multiplies Prestige 
         {key: "p", description: "d: Reset for Delta", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 									passiveGeneration() {
-										return (player.te.buyables[13].gte(2)?1:1)
+										if (player.te.buyables[13].gte(2))return (player.te.buyables[13].gte(2)?1:1)
   },
     layerShown(){if (player.tre.points.gte(1)) return "ghost"
 		if (hasUpgrade("o", 24)) return "ghost"
-		else return (player.te.buyables[13].gte(2))}
+		else return (player.te.buyables[11].gte(2))}
 })
 
 addLayer("m", {
