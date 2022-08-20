@@ -13,7 +13,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.236",
+	num: "0.241",
 	name: "Xtreensions!",
 }
 

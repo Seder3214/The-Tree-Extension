@@ -1377,7 +1377,7 @@ addLayer("n", {
 	clickables: {
 								    11: {
 		title: "<h3>Reset for Something</h3>",
-        display() {return "You will gain: " + format(player.n.points.div(1000).times(3)) + " / 12s" + "<br> Requires: 1000 Nothings"},
+        display() {return "You will gain: " + format(player.n.points.div(1000).times(3)) + " Somethings" + "<br> Requires: 1000 Nothings"},
 		canClick() { if (player.n.points.gte(1000)) return true},
 				unlocked() { return true},
 onClick() {
