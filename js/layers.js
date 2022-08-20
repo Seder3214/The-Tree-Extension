@@ -1403,16 +1403,19 @@ onClick() {
         requirementDescription: "100 Everythings",
         effectDescription: "So... Speed up point gain by 1e50x",
         done() { return player.n.et.gte(100) }
+		unlocked() {return hasUpgrade("n", 32)},
     },
 	    1: {
         requirementDescription: "150 Everythings",
         effectDescription: "So... Double previous milestone",
         done() { return player.n.et.gte(150) }
+			unlocked() {return hasUpgrade("n", 32)},
     },
 		    2: {
         requirementDescription: "308 Everythings",
         effectDescription: "Make this layer ends with inflation!",
         done() { return player.n.et.gte(308) }
+			unlocked() {return hasUpgrade("n", 32)},
     },
 		},
     		doReset(resettingLayer) {
