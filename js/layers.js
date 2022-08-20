@@ -1422,7 +1422,7 @@ onClick() {
 			             layerDataReset("n", keep)
 		},
 		update(diff) {
-						if (hasUpgrade("n", 24)) player.n.et = player.n.et.add(diff)
+						if (hasUpgrade("n", 24)) player.n.et = player.n.et.add(diff).add(diff).add(diff)
 			if (player.n.fc > 0) player.n.fc = Math.max(0, player.n.fc - diff)
 			if (player.points.gte(player.n.sm.pow(0.95).times(5))) return player.n.ot = player.n.ot.add(diff)
 		},
