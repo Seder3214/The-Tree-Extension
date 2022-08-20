@@ -1392,7 +1392,7 @@ onClick() {
 		canClick() { if (player.n.sm.gte(.5e7) && (player.n.fc <= 0) && (player.n.limit < 3)) return true},
 				unlocked() { return true},
 onClick() {
-	player.n.fc = 5
+	player.n.fc = 12
 	player.n.limit.add(1)
 	return player.n.sm = player.n.sm.sub(.5e7) },
 
