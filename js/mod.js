@@ -59,7 +59,7 @@ if (hasUpgrade("n", 11) && player.n.points.lte(player.n.cc.times(upgradeEffect("
 		if (hasUpgrade("n", 31)) gain = gain.times(upgradeEffect("n", 31))
 			if (hasMilestone("n", 0)) gain = gain.times(1e50)
 			if (hasMilestone("n", 1)) gain = gain.times(1e50)
-						if (hasMilestone("n", 2)) gain = gain.times(player.points).max(1)
+						if (player.tre.points.gte(2)) gain = gain.times(0.1)
 	return gain
 }
 

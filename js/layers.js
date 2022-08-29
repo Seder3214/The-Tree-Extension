@@ -1436,3 +1436,44 @@ onClick() {
     layerShown(){if (hasMilestone("tre", 1)) return false
 		else if (hasMilestone("tre", 0)) return true},
 })
+
+addLayer("u", {
+    name: "Upgrades", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "U", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+		auto: true,
+    }},
+    color: "green",
+    requires: new Decimal(2.5), // Can be a function that takes requirement increases into account
+    resource: "Upgrades", // Name of prestige currency
+    baseResource: "points", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0.7,
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+		    tabFormat: {
+        "Equations": {
+        content:[
+            function() {if (player.tab == "f") return "main-display"},
+            "prestige-button",
+            function() {if (player.tab == "f") return "resource-display"},
+            "blank",
+			"upgrades"
+            ]
+            },
+			},
+		    row: 4, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "n", description: "n: Reset for Nothing", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return (hasMilestone("tre", 1))},
+})
